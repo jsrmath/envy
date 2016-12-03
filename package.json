@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "color-js": "^1.0.3",
     "fabric": "^1.7.1",
     "keycode": "^2.1.7",
     "react": "^15.4.1",

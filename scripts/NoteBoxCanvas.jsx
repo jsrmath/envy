@@ -1,3 +1,4 @@
+import { numberToColor } from './color';
 import _ from 'underscore';
 import React from 'react';
 import autoBind from 'react-autobind';
@@ -28,14 +29,16 @@ export default class extends React.Component {
   }
 
   drawLines(points) {
+    const color = numberToColor(this.props.partial);
+
     _.each(this.lastLines, this.canvas.remove.bind(this.canvas));
 
     const lines = _.map(_.initial(points), (point, i) =>
       new fabric.Line(
         [point.t, this.props.canvasHeight - point.v, points[i+1].t, this.props.canvasHeight - points[i+1].v],
         {
-          fill: 'red',
-          stroke: 'red',
+          fill: color,
+          stroke: color,
           strokeWidth: 5,
           originX: 'center',
           originY: 'center',
