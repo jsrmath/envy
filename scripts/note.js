@@ -43,6 +43,7 @@ function playEnvelope(ctx, env, freq, gain, dur) {
   const gainNode = ctx.createGain();
   const now = ctx.currentTime;
   const durScale = dur / env.dur;
+  const gainScale = gain / env.maxGain;
 
   osc.connect(gainNode);
   osc.frequency.value = freq;
@@ -51,10 +52,8 @@ function playEnvelope(ctx, env, freq, gain, dur) {
   gainNode.gain.value = 0;
 
   _.each(env.points, (pt) => {
-    gainNode.gain.linearRampToValueAtTime(gain * pt.v, now + durScale * pt.t);
+    gainNode.gain.linearRampToValueAtTime(gainScale * pt.v, now + durScale * pt.t);
   });
-
-  gainNode.gain.linearRampToValueAtTime(0, now + dur);
 
   osc.start(now);
   osc.stop(now + dur);

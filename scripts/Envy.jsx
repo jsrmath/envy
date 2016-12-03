@@ -11,6 +11,9 @@ import { Button } from 'react-bootstrap';
 
 const keyBindings = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';'];
 
+const CANVAS_WIDTH = 250;
+const CANVAS_HEIGHT = 250;
+
 export default class extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +42,7 @@ export default class extends React.Component {
     const freq = Math.pow(2, (midiNumber - 57) / 12) * 440; // 57 should be 69, but there is a bug in sharp11
 
     const note = new Note(freq);
-    const env = new Envelope(1);
+    const env = new Envelope(CANVAS_WIDTH, CANVAS_HEIGHT);
 
     note.setPartial(1, env);
     env.addDefaultPoints();
@@ -55,7 +58,7 @@ export default class extends React.Component {
 
   noteBoxes() {
     return _.map(this.state.noteBoxes, (noteBox) =>
-      <NoteBox {...noteBox} />
+      <NoteBox {...noteBox} canvasWidth={CANVAS_WIDTH} canvasHeight={CANVAS_HEIGHT} />
     );
   }
 

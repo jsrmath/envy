@@ -1,8 +1,9 @@
 import _ from 'underscore';
 
 export default class {
-  constructor(dur) {
+  constructor(dur, maxGain) {
     this.dur = dur || 1;
+    this.maxGain = maxGain || 1;
     this.points = [];
   }
 
@@ -10,12 +11,12 @@ export default class {
     const NUM_POINTS = 4;
     const unit = this. dur / NUM_POINTS;
 
-    for (let i = 0; i <= NUM_POINTS; i+= 1) {
-      this.addPoint(unit * i, .5);
+    for (let i = 0; i <= NUM_POINTS; i += 1) {
+      this.addPoint(unit * i, this.maxGain / 2);
     }
   }
 
-  removePoint(t, v) {
+  removePoint(t) {
     const index = _.findIndex(this.points, (p) => p.t === t);
 
     if (index > -1) {
@@ -35,5 +36,10 @@ export default class {
       this.points.push({t: t, v: v});
     }
     this.points = _.sortBy(this.points, 't');
+  }
+
+  changePoint(oldT, newT, v) {
+    this.removePoint(oldT);
+    this.addPoint(newT, v);
   }
 }

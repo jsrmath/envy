@@ -1,4 +1,5 @@
 import Envelope from './envelope';
+import NoteBoxCanvas from './NoteBoxCanvas.jsx';
 import _ from 'underscore';
 import React from 'react';
 import autoBind from 'react-autobind';
@@ -24,7 +25,7 @@ export default class extends React.Component {
 
   newPartial() {
     const partial = Number(prompt("Enter a number greater than 1..."));
-    const env = new Envelope(partial);
+    const env = new Envelope(this.props.canvasWidth, this.props.canvasHeight);
     this.props.note.setPartial(partial, env);
     env.addDefaultPoints();
     this.setState({partial: partial});
@@ -36,6 +37,7 @@ export default class extends React.Component {
         <Button>View all partials</Button>
         {this.editPartialButtons()}
         <Button onClick={this.newPartial}>New partial</Button>
+        <NoteBoxCanvas {...this.props} partial={this.state.partial} />
       </div>
     );
   }
