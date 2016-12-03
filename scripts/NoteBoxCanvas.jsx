@@ -28,24 +28,57 @@ export default class extends React.Component {
     this.drawCanvas();
   }
 
-  drawLines(points) {
+  getLines(points, color, scale) {
+    const lines = _.map(_.initial(points), (point, i) =>
+      new fabric.Line(
+        [
+          point.t,
+          this.props.canvasHeight - point.v * scale,
+          points[i+1].t,
+          this.props.canvasHeight - points[i+1].v * scale
+        ], {
+          fill: color,
+          stroke: color,
+          strokeWidth: 4,
+          originX: 'center',
+          originY: 'center',
+          selectable: false,
+          hoverCursor: 'default'
+        }
+      )
+    );
+
+    const lineConnectors = _.map(points, (point) => 
+      new fabric.Circle({
+        left: point.t,
+        top: this.props.canvasHeight - point.v * scale,
+        originX: 'center',
+        originY: 'center',
+        radius: 2,
+        fill: color,
+        strokeWidth: 0,
+        selectable: false,
+        hoverCursor: 'default'
+      })
+    );
+
+    return lines.concat(lineConnectors);
+  }
+
+  drawAllPartials() {
+    _.each(this.props.note.partials, (env, partial) => {
+      const lines = this.getLines(env.points, numberToColor(partial), 1 / Math.pow(partial, this.props.note.exp));
+      _.each(lines, (l) => this.canvas.add(l));
+    });
+  }
+
+  drawLines() {
+    const points = this.props.note.getPartial(this.props.partial).points;
     const color = numberToColor(this.props.partial);
 
     _.each(this.lastLines, this.canvas.remove.bind(this.canvas));
 
-    const lines = _.map(_.initial(points), (point, i) =>
-      new fabric.Line(
-        [point.t, this.props.canvasHeight - point.v, points[i+1].t, this.props.canvasHeight - points[i+1].v],
-        {
-          fill: color,
-          stroke: color,
-          strokeWidth: 5,
-          originX: 'center',
-          originY: 'center',
-          selectable: false
-        }
-      )
-    );
+    const lines = this.getLines(points, color, 1);
 
     _.each(lines, (line) => {
       this.canvas.add(line);
@@ -55,8 +88,8 @@ export default class extends React.Component {
     this.lastLines = lines;
   }
 
-  drawPoints(points) {
-    _.each(points, (point, index) =>
+  drawPoints() {
+    _.each(this.props.note.getPartial(this.props.partial).points, (point, index) =>
       this.canvas.add(new fabric.Circle({
         left: point.t,
         top: this.props.canvasHeight - point.v,
@@ -75,10 +108,13 @@ export default class extends React.Component {
   }
 
   drawCanvas() {
-    const env = this.props.note.getPartial(this.props.partial);
-
-    this.drawPoints(env.points)
-    this.drawLines(env.points);
+    if (this.props.partial === null) {
+      this.drawAllPartials();
+    }
+    else {
+      this.drawPoints();
+      this.drawLines();
+    }
   }
 
   setCanvasHandler() {
