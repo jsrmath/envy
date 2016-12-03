@@ -1,5 +1,5 @@
-import Envy from './Envy.jsx';
 import NoteBox from './NoteBox.jsx';
+import Controls from './Controls.jsx';
 import Note from './Note'
 import Envelope from './Envelope'
 import s11 from 'sharp11';
@@ -13,12 +13,18 @@ const keyBindings = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';'];
 
 const CANVAS_WIDTH = 250;
 const CANVAS_HEIGHT = 250;
+const CANVAS = {
+  canvasWidth: CANVAS_WIDTH,
+  canvasHeight: CANVAS_HEIGHT
+}
 
 export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      noteBoxes: []
+      noteBoxes: [],
+      currentNoteBox: -1,
+      partial: null
     };
     autoBind(this);
   }
@@ -54,12 +60,39 @@ export default class extends React.Component {
       noteName: noteName
     });
     this.setState({noteBoxes: noteBoxes});
+    this.selectNoteBox(noteBoxes.length - 1);
+  }
+
+  currentNoteBox() {
+    if (this.state.currentNoteBox > -1) {
+      return this.state.noteBoxes[this.state.currentNoteBox];
+    }
   }
 
   noteBoxes() {
-    return _.map(this.state.noteBoxes, (noteBox) =>
-      <NoteBox {...noteBox} canvasWidth={CANVAS_WIDTH} canvasHeight={CANVAS_HEIGHT} />
+    return _.map(this.state.noteBoxes, (noteBox, i) =>
+      <NoteBox
+        {...noteBox}
+        {...CANVAS}
+        handleClick={() => {if (this.state.currentNoteBox !== i) this.selectNoteBox(i);}}
+        partial={this.state.currentNoteBox === i ? this.state.partial : null} />
     );
+  }
+
+  selectNoteBox(i) {
+    this.setState({currentNoteBox: i, partial: null});
+  }
+
+  controls() {
+    const noteBox = this.currentNoteBox();
+
+    if (!noteBox) return null;
+
+    return <Controls
+      {...this.currentNoteBox()}
+      {...CANVAS}
+      setPartial={(p) => this.setState({partial: p})}
+      partial={this.state.partial} />
   }
 
   boundKeys() {
@@ -79,6 +112,7 @@ export default class extends React.Component {
     return (
       <div>
         <Button onClick={this.newNoteBox}>+</Button>
+        {this.controls()}
         {this.noteBoxes()}
       </div>
     );
