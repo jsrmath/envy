@@ -1,27 +1,33 @@
-import Note from './note';
-import Envelope from './envelope';
+import Envy from './Envy.jsx';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-const note = new Note(440, 1);
-const env1 = new Envelope(1);
-const env2 = new Envelope(1);
-const env3 = new Envelope(1);
+ReactDOM.render(
+  <Envy ctx={ctx} />,
+  document.getElementById('content')
+);
 
-env1.addPoint(.25, Math.random());
-env1.addPoint(.5, Math.random());
-env1.addPoint(.75, Math.random());
+// const note = new Note(440, 1);
+// const env1 = new Envelope(1);
+// const env2 = new Envelope(1);
+// const env3 = new Envelope(1);
 
-env2.addPoint(.25, Math.random());
-env2.addPoint(.5, Math.random());
-env2.addPoint(.75, Math.random());
+// env1.addPoint(.25, Math.random());
+// env1.addPoint(.5, Math.random());
+// env1.addPoint(.75, Math.random());
 
-env3.addPoint(.25, Math.random());
-env3.addPoint(.5, Math.random());
-env3.addPoint(.75, Math.random());
+// env2.addPoint(.25, Math.random());
+// env2.addPoint(.5, Math.random());
+// env2.addPoint(.75, Math.random());
 
-note.setPartial(1, env1);
-note.setPartial(2, env2);
-note.setPartial(3, env3);
+// env3.addPoint(.25, Math.random());
+// env3.addPoint(.5, Math.random());
+// env3.addPoint(.75, Math.random());
 
-note.play(ctx, 2, .5);
+// note.setPartial(1, env1);
+// note.setPartial(2, env2);
+// note.setPartial(3, env3);
+
+// note.play(ctx, 2, .5);

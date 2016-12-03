@@ -6,6 +6,23 @@ export default class {
     this.points = [];
   }
 
+  addDefaultPoints() {
+    const NUM_POINTS = 4;
+    const unit = this. dur / NUM_POINTS;
+
+    for (let i = 0; i <= NUM_POINTS; i+= 1) {
+      this.addPoint(unit * i, .5);
+    }
+  }
+
+  removePoint(t, v) {
+    const index = _.findIndex(this.points, (p) => p.t === t);
+
+    if (index > -1) {
+      this.points.splice(index, 1);
+    }
+  }
+
   addPoint(t, v) {
     const point = _.findWhere(this.points, {t: t});
 

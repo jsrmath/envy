@@ -16,6 +16,7 @@ export default class {
   }
 
   setPartial(num, env) {
+    if (num < 1) throw new Error('Invalid partial');
     this.partials[num] = env;
   }
 
