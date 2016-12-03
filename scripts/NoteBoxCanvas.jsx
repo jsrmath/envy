@@ -3,21 +3,32 @@ import React from 'react';
 import autoBind from 'react-autobind';
 import 'fabric';
 
-// Cache of the last lines we drew for easy removal
-let lastLines = [];
-
 export default class extends React.Component {
   constructor(props) {
     super(props);
     autoBind(this);
+
+    // Cache of the last lines we drew for easy removal
+    this.lastLines = [];
   }
 
   componentDidMount() {
+    this.canvas = new fabric.Canvas(this.props.keyBinding, {
+      width: this.props.canvasWidth,
+      height: this.props.canvasHeight,
+      selection: false
+    });
+    this.drawCanvas();
+    this.setCanvasHandler();
+  }
+
+  componentDidUpdate() {
+    this.canvas.clear();
     this.drawCanvas();
   }
 
-  drawLines(points, canvas) {
-    _.each(lastLines, canvas.remove.bind(canvas));
+  drawLines(points) {
+    _.each(this.lastLines, this.canvas.remove.bind(this.canvas));
 
     const lines = _.map(_.initial(points), (point, i) =>
       new fabric.Line(
@@ -34,16 +45,16 @@ export default class extends React.Component {
     );
 
     _.each(lines, (line) => {
-      canvas.add(line);
-      canvas.sendToBack(line);
+      this.canvas.add(line);
+      this.canvas.sendToBack(line);
     });
 
-    lastLines = lines;
+    this.lastLines = lines;
   }
 
-  drawPoints(points, canvas) {
+  drawPoints(points) {
     _.each(points, (point, index) =>
-      canvas.add(new fabric.Circle({
+      this.canvas.add(new fabric.Circle({
         left: point.t,
         top: this.props.canvasHeight - point.v,
         originX: 'center',
@@ -61,18 +72,16 @@ export default class extends React.Component {
   }
 
   drawCanvas() {
-    const canvas = new fabric.Canvas(this.props.keyBinding, {
-      width: this.props.canvasWidth,
-      height: this.props.canvasHeight,
-      selection: false
-    });
-
     const env = this.props.note.getPartial(this.props.partial);
 
-    this.drawPoints(env.points, canvas)
-    this.drawLines(env.points, canvas);
+    this.drawPoints(env.points)
+    this.drawLines(env.points);
+  }
 
-    canvas.on('object:moving', (e) => {
+  setCanvasHandler() {
+    this.canvas.on('object:moving', (e) => {
+      const env = this.props.note.getPartial(this.props.partial);
+
       // Prevent dragging points off screen
       if (e.target.left < 0) e.target.left = 0;
       if (e.target.left > this.props.canvasWidth) e.target.left = this.props.canvasWidth;
@@ -87,7 +96,7 @@ export default class extends React.Component {
 
       env.changePoint(e.target.previousLeft, e.target.left, this.props.canvasHeight - e.target.top);
       e.target.previousLeft = e.target.left;
-      this.drawLines(env.points, canvas);
+      this.drawLines(env.points);
     });
   }
 

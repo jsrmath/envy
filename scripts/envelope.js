@@ -9,11 +9,13 @@ export default class {
 
   addDefaultPoints() {
     const NUM_POINTS = 4;
-    const unit = this. dur / NUM_POINTS;
+    const unit = this.dur / NUM_POINTS;
 
-    for (let i = 0; i <= NUM_POINTS; i += 1) {
+    for (let i = 0; i <= NUM_POINTS - 1; i += 1) {
       this.addPoint(unit * i, this.maxGain / 2);
     }
+
+    this.addPoint(this.dur, 0);
   }
 
   removePoint(t) {

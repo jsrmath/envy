@@ -17,7 +17,11 @@ export default class extends React.Component {
 
   editPartialButtons() {
     return _.map(this.props.note.partials, (env, num) =>
-      <Button className={classNames({disabled: this.state.partial === Number(num)})} key={num}>
+      <Button
+        className={classNames({disabled: this.state.partial === Number(num)})}
+        key={num}
+        onClick={() => this.setState({partial: Number(num)})}
+      >
         Edit partial {num}
       </Button>
     );
@@ -34,7 +38,7 @@ export default class extends React.Component {
   render() {
     return (
       <div>
-        <Button>View all partials</Button>
+        <Button onClick={() => this.setState({partial: null})}>View all partials</Button>
         {this.editPartialButtons()}
         <Button onClick={this.newPartial}>New partial</Button>
         <NoteBoxCanvas {...this.props} partial={this.state.partial} />
