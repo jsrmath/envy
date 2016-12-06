@@ -106,7 +106,7 @@ export default class extends React.Component {
     const noteBox = _.find(this.state.noteBoxes, (noteBox) => e.keyCode === keycode(noteBox.keyBinding));
     if (noteBox) {
       e.preventDefault();
-      noteBox.note.play(this.props.ctx, 1, .5);
+      noteBox.note.play(this.props.ctx, .5);
     }
   }
 

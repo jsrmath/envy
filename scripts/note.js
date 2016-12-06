@@ -1,9 +1,10 @@
 import _ from 'underscore';
 
 export default class {
-  constructor(freq, exp) {
+  constructor(freq, exp, dur) {
     this.freq = freq;
     this.exp = exp || 1; // A partial n has a max gain of 1 / n^exp
+    this.dur = dur || 0.5;
     this.partials = {};
   }
 
@@ -24,8 +25,11 @@ export default class {
     this.exp = exp;
   }
 
-  play(ctx, dur, gain) {
-    dur = dur || 1;
+  setDur(dur) {
+    this.dur = dur;
+  }
+
+  play(ctx, gain) {
     gain = gain || 1;
 
     _.each(this.partials, (env, num) => playEnvelope(
@@ -33,7 +37,7 @@ export default class {
       env,
       this.freq * num,
       gain / Math.pow(num, this.exp),
-      dur
+      this.dur
     ));
   }
 }

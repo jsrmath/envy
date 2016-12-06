@@ -7,7 +7,7 @@
   margin-left: 0;
 }
 
-.note-box-active .note-name, .note-box-active .key-name {
+.note-box-active .note-attribute {
   font-weight: bold;
 }
 
@@ -27,4 +27,17 @@
 .edit-partial-button.selected {
   background-color: #eee;
   cursor: default;
+}
+
+.slider-wrapper {
+  display: table;
+}
+
+input[type="range"].duration-slider, .note-duration {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.note-duration {
+  padding-left: 0.5em;
 }

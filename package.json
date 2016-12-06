@@ -26,6 +26,7 @@
     "react-autobind": "^1.0.6",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",
+    "react-slider": "^0.7.0",
     "sharp11": "^1.1.4",
     "underscore": "^1.8.3"
   }

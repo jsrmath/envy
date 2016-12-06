@@ -1,4 +1,5 @@
 import NoteBoxCanvas from './NoteBoxCanvas.jsx';
+import DurationSlider from './DurationSlider.jsx';
 import _ from 'underscore';
 import React from 'react';
 import autoBind from 'react-autobind';
@@ -15,8 +16,9 @@ export default class extends React.Component {
 
     return (
       <div className={classes} onClick={this.props.handleClick}>
-        <div className="note-name">{`${this.props.noteName} at ${this.props.note.freq.toFixed(2)} Hz`}</div>
-        <div className="key-name">{`Press ${this.props.keyBinding} to play`}</div>
+        <div className="note-attribute note-name">{`${this.props.noteName} at ${this.props.note.freq.toFixed(2)} Hz`}</div>
+        <div className="note-attribute key-name">{`Press ${this.props.keyBinding} to play`}</div>
+        <DurationSlider note={this.props.note} />
         <NoteBoxCanvas {...this.props} />
       </div>
     );
