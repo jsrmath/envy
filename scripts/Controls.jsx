@@ -26,8 +26,14 @@ export default class extends React.Component {
   }
 
   newPartial() {
-    const partial = Number(prompt("Enter a number between 1 and 10"));
     const env = new Envelope(this.props.canvasWidth, this.props.canvasHeight);
+    let partial;
+
+    while (true) {
+      partial = Number(prompt("Enter a number between 1 and 10"));
+      if (partial >= 1 && partial <= 10) break;
+    }
+
     this.props.note.setPartial(partial, env);
     env.addDefaultPoints();
     this.props.setPartial(partial);
