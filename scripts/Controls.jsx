@@ -1,8 +1,9 @@
 import Envelope from './envelope';
+import { numberToColor } from './color';
 import _ from 'underscore';
 import React from 'react';
 import autoBind from 'react-autobind';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import classNames from 'classnames';
 
 export default class extends React.Component {
@@ -14,9 +15,10 @@ export default class extends React.Component {
   editPartialButtons() {
     return _.map(this.props.note.partials, (env, num) =>
       <Button
-        className={classNames({disabled: this.props.partial === Number(num)})}
+        className={classNames('edit-partial-button', {selected: this.props.partial === Number(num)})}
         key={num}
         onClick={() => this.props.setPartial(Number(num))}
+        style={{'color': numberToColor(num)}}
       >
         Edit partial {num}
       </Button>
@@ -24,7 +26,7 @@ export default class extends React.Component {
   }
 
   newPartial() {
-    const partial = Number(prompt("Enter a number greater than 1..."));
+    const partial = Number(prompt("Enter a number between 1 and 10"));
     const env = new Envelope(this.props.canvasWidth, this.props.canvasHeight);
     this.props.note.setPartial(partial, env);
     env.addDefaultPoints();
@@ -35,11 +37,11 @@ export default class extends React.Component {
     // Awful overloading of the word partial happening here.
     // _.partial is totally unrelated to how partial is used throughout the codebase.
     return (
-      <div>
+      <ButtonGroup>
         <Button onClick={_.partial(this.props.setPartial, null)}>View all partials</Button>
         {this.editPartialButtons()}
-        <Button onClick={this.newPartial}>New partial</Button>
-      </div>
+        <Button onClick={this.newPartial}>Add partial</Button>
+      </ButtonGroup>
     );
   }
 }

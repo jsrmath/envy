@@ -7,7 +7,7 @@ import _ from 'underscore';
 import keycode from 'keycode';
 import React from 'react';
 import autoBind from 'react-autobind';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonToolbar, ButtonGroup } from 'react-bootstrap';
 
 const keyBindings = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';'];
 
@@ -60,7 +60,7 @@ export default class extends React.Component {
       noteName: noteName
     });
     this.setState({noteBoxes: noteBoxes});
-    this.selectNoteBox(noteBoxes.length - 1);
+    this.selectNoteBox(noteBoxes.length - 1, 1);
   }
 
   currentNoteBox() {
@@ -82,8 +82,8 @@ export default class extends React.Component {
     );
   }
 
-  selectNoteBox(i) {
-    this.setState({currentNoteBox: i, partial: null});
+  selectNoteBox(i, partial) {
+    this.setState({currentNoteBox: i, partial: partial || null});
   }
 
   controls() {
@@ -114,8 +114,12 @@ export default class extends React.Component {
     document.onkeydown = this.keyHandler;
     return (
       <div>
-        <Button onClick={this.newNoteBox}>+</Button>
-        {this.controls()}
+        <ButtonToolbar>
+          <ButtonGroup>
+            <Button bsStyle="primary" onClick={this.newNoteBox}>Add note</Button>
+          </ButtonGroup>
+          {this.controls()}
+        </ButtonToolbar>
         {this.noteBoxes()}
       </div>
     );

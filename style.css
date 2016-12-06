@@ -7,6 +7,10 @@
   margin-left: 0;
 }
 
+.note-box-active .note-name, .note-box-active .key-name {
+  font-weight: bold;
+}
+
 .note-box-inactive {
   cursor: pointer;
   border: dashed 2px #000;
@@ -16,3 +20,11 @@
   cursor: pointer !important;
 }
 
+.edit-partial-button, .edit-partial-button:hover {
+  background-color: #fff;
+}
+
+.edit-partial-button.selected {
+  background-color: #eee;
+  cursor: default;
+}
