@@ -70,12 +70,15 @@ export default class extends React.Component {
   }
 
   noteBoxes() {
+    const isActive = (i) => this.state.currentNoteBox === i;
+
     return _.map(this.state.noteBoxes, (noteBox, i) =>
       <NoteBox
         {...noteBox}
         {...CANVAS}
-        handleClick={() => {if (this.state.currentNoteBox !== i) this.selectNoteBox(i);}}
-        partial={this.state.currentNoteBox === i ? this.state.partial : null} />
+        handleClick={() => {if (!isActive(i)) this.selectNoteBox(i);}}
+        isActive={isActive(i)}
+        partial={isActive(i) ? this.state.partial : null} />
     );
   }
 

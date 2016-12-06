@@ -1,3 +1,18 @@
-.note-box-canvas {
-  border: solid 1px #000;
+.note-box {
+  border: solid 2px #000;
+  border-radius: 4px;
+  display: inline-block;
+  padding: 1em;
+  margin: 1em;
+  margin-left: 0;
 }
+
+.note-box-inactive {
+  cursor: pointer;
+  border: dashed 2px #000;
+}
+
+.note-box-inactive .note-box-canvas {
+  cursor: pointer !important;
+}
+

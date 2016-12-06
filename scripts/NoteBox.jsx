@@ -11,8 +11,12 @@ export default class extends React.Component {
   }
 
   render() {
+    const classes = classNames('note-box', {'note-box-active': this.props.isActive, 'note-box-inactive': !this.props.isActive});
+
     return (
-      <div onClick={this.props.handleClick}>
+      <div className={classes} onClick={this.props.handleClick}>
+        <div className="note-name">{`${this.props.noteName} at ${this.props.note.freq.toFixed(2)} Hz`}</div>
+        <div className="key-name">{`Press ${this.props.keyBinding} to play`}</div>
         <NoteBoxCanvas {...this.props} />
       </div>
     );
